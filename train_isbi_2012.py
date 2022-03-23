@@ -1,3 +1,4 @@
+###########################필요 라이브러리 ##############
 import tensorflow as tf
 
 from absl import flags
@@ -9,22 +10,27 @@ import numpy as np
 
 from keras.preprocessing.image import ImageDataGenerator
 
+###########################################################
+
+##########################외부 파일에서 함수 사용 #########
 from model import UNET_ISBI_2012
 from loss import binary_loss_object
+###########################################################
+
 
 # set seed
 tf.random.set_seed(1234)
 
-flags.DEFINE_string('checkpoint_path', default='saved_model_isbi_2012/unet_model.h5', help='path to a directory to save model checkpoints during training')
-flags.DEFINE_string('tensorboard_log_path', default='tensorboard_log_isbi_2012', help='path to a directory to save tensorboard log')
-flags.DEFINE_integer('num_epochs', default=5, help='training epochs')
-flags.DEFINE_integer('steps_per_epoch', default=2000, help='steps per epoch')
-flags.DEFINE_integer('num_classes', default=1, help='number of prediction classes')
+flags.DEFINE_string('checkpoint_path', default='saved_model_isbi_2012/unet_model.h5', help='path to a directory to save model checkpoints during training') # checkpoint 파일 저장 경로 
+flags.DEFINE_string('tensorboard_log_path', default='tensorboard_log_isbi_2012', help='path to a directory to save tensorboard log') # 텐서보드 로그 저장 
+flags.DEFINE_integer('num_epochs', default=5, help='training epochs') # 에포크 지정
+flags.DEFINE_integer('steps_per_epoch', default=2000, help='steps per epoch') # 에폭 한번당 몇번 스텝 
+flags.DEFINE_integer('num_classes', default=1, help='number of prediction classes') # Prediction label 개수 #0~1 (0.5보다 크면 1 아니면 0) 
 
 FLAGS = flags.FLAGS
 
 # set configuration value
-batch_size = 2
+batch_size = 2   
 learning_rate = 0.0001
 
 # normalize isbi-2012 data
@@ -52,7 +58,7 @@ def make_train_generator(batch_size, aug_dict):
       target_size = (512, 512),
       batch_size = batch_size,
       color_mode='grayscale',
-      seed=1
+      seed=1 # mask랑 이미지가 같이 aug 되게끔. 
       )
   mask_generator = mask_gen.flow_from_directory(
       directory='./isbi_2012/preprocessed',
@@ -61,7 +67,7 @@ def make_train_generator(batch_size, aug_dict):
       target_size = (512, 512),
       batch_size = batch_size,
       color_mode='grayscale',
-      seed=1
+      seed=1  #  mask랑 이미지가 같이 Augmetation되게끔. 
       )
   train_generator = zip(image_generator, mask_generator)
   for (batch_images, batch_labels) in train_generator:
@@ -129,7 +135,7 @@ def main(_):
                       shear_range=0.05,
                       zoom_range=0.05,
                       horizontal_flip=True,
-                      fill_mode='nearest')
+                      fill_mode='nearest') # 다양한 augmentation 적용 
 
   # make generator
   train_generator = make_train_generator(batch_size, aug_dict)
