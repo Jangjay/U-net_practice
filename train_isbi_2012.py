@@ -21,7 +21,7 @@ from loss import binary_loss_object
 # set seed
 tf.random.set_seed(1234)
 
-flags.DEFINE_string('checkpoint_path', default='saved_model_isbi_2012/unet_model.h5', help='path to a directory to save model checkpoints during training') # checkpoint 파일 저장 경로 
+flags.DEFINE_string('checkpoint_path', default='unet_model.h5', help='path to a directory to save model checkpoints during training') # checkpoint 파일 저장 경로 
 flags.DEFINE_string('tensorboard_log_path', default='tensorboard_log_isbi_2012', help='path to a directory to save tensorboard log') # 텐서보드 로그 저장 
 flags.DEFINE_integer('num_epochs', default=5, help='training epochs') # 에포크 지정
 flags.DEFINE_integer('steps_per_epoch', default=2000, help='steps per epoch') # 에폭 한번당 몇번 스텝 
@@ -160,8 +160,8 @@ def main(_):
   optimizer = tf.optimizers.Adam(learning_rate) 
 
   # check if checkpoint path exists
-  if not os.path.exists(FLAGS.checkpoint_path.split('/')[0]):
-    os.mkdir(FLAGS.checkpoint_path.split('/')[0])
+#  if not os.path.exists(FLAGS.checkpoint_path.split('/')[0]):
+#    os.mkdir(FLAGS.checkpoint_path.split('/')[0])
 
   # restore latest checkpoint
   if os.path.isfile(FLAGS.checkpoint_path):
