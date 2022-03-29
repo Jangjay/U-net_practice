@@ -182,5 +182,5 @@ def main(_):
                            epochs=FLAGS.num_epochs,
                            callbacks=[model_checkpoint_callback, tensorboard_callback, custom_callback])
 
-if __name__ == '__main__':
-  app.run(main)
+  if __name__ == '__main__':
+    app.run(main)
